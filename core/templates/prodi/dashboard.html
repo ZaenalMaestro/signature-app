@@ -1,0 +1,119 @@
+{% extends 'main/base.html' %}
+{% block title %}
+   Prodi - Dashboard
+{% endblock title %}
+
+{% block css %}
+   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">
+{% endblock  %}
+
+{% block body %}
+<div class="row">
+   <div class="col-xl-12">
+   <div class="card">
+      <div class="card-header border-0">
+         <div class="row align-items-center">
+         <div class="col">
+            <h3 class="mb-0">Daftar Tanda Tangan Digital Dosen</h3>
+         </div>
+         <div class="col text-right">
+            <a href="#!" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#ttd-digital-modal">
+               Buat Tanda Tangan Digital
+            </a>
+         </div>
+         </div>
+      </div>
+      <div class="table-responsive">
+         <!-- Projects table -->
+         <table class="table align-items-center table-flush" id="example" style="width:100%">
+            <thead class="thead-light">
+               <tr>
+                  <th scope="col">No.</th>
+                  <th scope="col">Nama Dosen</th>
+                  <th scope="col">Tanda Tangan Digital 1</th>
+                  <th scope="col">Tanda Tangan Digital 2</th>
+                  <th scope="col">Aksi</th>
+               </tr>
+            </thead>
+            <tbody>
+               {% for row in data_dosen %}                  
+               <tr>
+                  <th scope="row">{{row.id_dosen}}</th>
+                  <th scope="row">{{ row.nama_dosen }}</th>
+                  <th scope="row">{{ row.tanda_tangan_digital_1 }}</th>
+                  <th scope="row">{{ row.tanda_tangan_digital_2 }}</th>
+                  <th scope="row">
+                     <button type="button" class="btn btn-danger btn-sm">Hapus</button>
+                  </th>
+               </tr>
+               {% endfor %}
+            </tbody>
+         </table>
+      </div>
+   </div>
+   </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="ttd-digital-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+   <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Form Buat Tanda Tangan Digital</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <form action="{{ url_for('upload') }}" enctype="multipart/form-data" method="POST">
+            <div class="modal-body">
+               <!-- nama dosen -->
+               <div class="form-group">
+                  <label for="nama-dosen">Nama Dosen</label>
+                  <input type="text" class="form-control" id="nama-dosen" name="nama-dosen" placeholder="Masukkan nama dosen">
+               </div>
+
+               <!-- tanda tangan dosen -->
+               <label for="exampleFormControlInput1">File Tanda Tangan</label>
+               <div class="custom-file">
+                  <input type="file" class="custom-file-input d-none" id="customFile" name="file">
+                  <label class="custom-file-label" for="customFile">Pilih file</label>
+               </div>
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup Form</button>
+               <button type="submit" class="btn btn-success">Buat Tanda Tangan Digital</button>
+            </div>
+         </form>
+      </div>
+   </div>
+</div>
+{% endblock  %}
+
+{% block javascript %}
+   <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+   <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+   <script>
+      $(document).ready(function() {
+         $('#example').DataTable();
+      });
+   </script>
+
+   <!-- flash -->
+
+   {% with messages = get_flashed_messages()  %}
+      {% if messages %}
+         {% for message in messages %}
+            <script>
+               Swal.fire({
+                  position: 'center',
+                  icon: 'success',
+                  title: '{{ message }}',
+                  showConfirmButton: false,
+                  timer: 2000
+               })
+            </script>
+         {% endfor %}
+      {% endif %}
+   {% endwith  %}
+{% endblock  %}
