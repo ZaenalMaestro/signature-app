@@ -24,16 +24,16 @@
                      <h5 class="mx-5">Form Verifikasi Tanda Tangan Dosen</h5>
                   </div>
                   <div class="card-body mx-5">
-                     <form>
+                     <form action="{{ url_for('verifikasi') }}" method="POST" enctype="multipart/form-data">
                         <div class="form-group mb-4">
                            <label for="stambuk">Stambuk</label>
-                           <input type="number" class="form-control" id="stambuk" placeholder="Masukkan stambuk" autofocus>
+                           <input type="number" class="form-control" name="stambuk" id="stambuk" placeholder="Masukkan stambuk" autofocus>
                         </div>
                         <label for="exampleInputEmail1">File Skripsi</label>
                         <div class="input-group">
                            <div class="custom-file">
-                              <input type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
-                              <label class="custom-file-label" for="inputGroupFile04">Pilih File Skripsi <i>(.pdf)</i></label>
+                              <input type="file" class="custom-file-input" name="file-skripsi" id="fileSkripsi">
+                              <label class="custom-file-label" for="fileSkripsi">Pilih File Skripsi <i>(.pdf)</i></label>
                            </div>
                         </div>
                         <div class="row mt-5">

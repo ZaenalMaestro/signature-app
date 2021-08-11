@@ -1,4 +1,6 @@
+from werkzeug.utils import secure_filename
 import fitz, hashlib
+import os
 
 def ekstrakGambar(location):
    pdf_file = fitz.open(location)
@@ -12,8 +14,8 @@ def ekstrakGambar(location):
          if pix.n > 4:
             pix = fitz.Pixmap(fitz.csRGB, pix) 
 
-         pix.writePNG(f'imagec_{pageNumber}_{imgNumber}.png') 
-         filename = f'imagec_{pageNumber}_{imgNumber}.png'
+         filename = f'image_{pageNumber}_{imgNumber}.png'
+         pix.writePNG(filename) 
          filenames.append(filename)
    
    return filenames
@@ -35,5 +37,16 @@ def hash_file(filename):
 
    # return the hex representation of digest
    return h.hexdigest()
+
+def allowed_file(filename):
+   ALLOWED_EXTENSION = set(['pdf'])
+   return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSION
+
+def upload_file(path, file):
+   filename = secure_filename(file.filename)
+   
+   if file and allowed_file(filename):
+      filename = secure_filename(filename)
+      file.save(os.path.join(path, filename))
 
 
