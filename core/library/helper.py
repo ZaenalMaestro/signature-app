@@ -48,5 +48,22 @@ def upload_file(path, file):
    if file and allowed_file(filename):
       filename = secure_filename(filename)
       file.save(os.path.join(path, filename))
+      
+def get_id_dosen(mahasiswa):
+   id_dosen_bersangkutan = []
+   id_dosen_bersangkutan.append(mahasiswa.pembimbing_1)
+   id_dosen_bersangkutan.append(mahasiswa.pembimbing_2)
+   id_dosen_bersangkutan.append(mahasiswa.penguji_1)
+   id_dosen_bersangkutan.append(mahasiswa.penguji_2)
+   id_dosen_bersangkutan.append(mahasiswa.penguji_3)
+   id_dosen_bersangkutan.append(mahasiswa.ketua_prodi)
+   
+   return id_dosen_bersangkutan
 
+def get_nilai_hash(nama_gambar):
+   daftar_hash = []
+   for gambar in nama_gambar:
+      daftar_hash.append(hash_file(gambar))
+      os.remove(gambar)
+   return daftar_hash
 
