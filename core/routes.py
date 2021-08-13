@@ -91,12 +91,26 @@ def verifikasi():
       
       
       ttd_cocok = 0
+      hasil_verifikasi = list()
       for dosen in hash_dosen:
          for mhs in daftar_hash:
             if dosen['tanda_tangan_digital_1'] == mhs or dosen['tanda_tangan_digital_2'] == mhs:
                ttd_cocok += 1
+               hasil_verifikasi.append({
+                  'nama_dosen':dosen['nama_dosen'],
+                  'status': 'valid'
+               })
+               break
+            else:
+               hasil_verifikasi.append({
+                  'nama_dosen':dosen['nama_dosen'],
+                  'status': 'tidak_valid'
+               })
                break
       
+      
+      hasil_akhir = (ttd_cocok, hasil_verifikasi)
+      return render_template('verifikasi/verifikasi.html', hasil_akhir=hasil_akhir)
 
       
       return 'tanda tangan yang cocok adalah '+ str(ttd_cocok)
