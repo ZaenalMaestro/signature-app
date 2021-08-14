@@ -67,3 +67,7 @@ def get_nilai_hash(nama_gambar):
       os.remove(gambar)
    return daftar_hash
 
+def hash_password(password):
+   h = hashlib.sha256(password.encode())
+   return h.hexdigest()
+

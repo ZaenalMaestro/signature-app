@@ -1,27 +1,57 @@
 from threading import main_thread
-from flask import render_template, request, redirect, flash
+from flask import render_template, request, redirect, flash, session
 from flask.helpers import url_for
 from werkzeug.utils import secure_filename
 from .model import Dosen
 from .models.Mahasiswa import *
+from .models.Prodi import *
 from core import app, db
 from .library.helper import (
    ekstrakGambar, get_nilai_hash, hash_file, 
-   allowed_file, upload_file, get_id_dosen
+   allowed_file, upload_file, get_id_dosen, hash_password
 )
 import os
-
-from pprint import pprint
 
 # ================ prodi ================ 
 @app.route('/')
 def index():
+   if not session.get('login'):
+      return redirect('/login')
+   
    data_dosen = Dosen.query.all()
    return render_template('prodi/dashboard.html', data_dosen = data_dosen)
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
+   if session.get('login') == True:
+      return redirect('/')
+   
+   if request.method == 'POST':
+      username = request.form['username']
+      password = hash_password(request.form['password'])
+      data_prodi = Prodi.get_by(username)
+      
+      if not data_prodi:
+         flash('username-invalid')
+         return render_template('prodi/login.html', username=username)
+         
+      if username == data_prodi.username: # cek username
+         if password == data_prodi.password: # cek password
+            session['login'] = True
+            return redirect(url_for('index'))
+         else:
+            flash('password-invalid')
+            return render_template('prodi/login.html', username=username)
+      else:
+         flash('username-invalid')
+         return render_template('prodi/login.html', username=username)
+   # REQUEST GET
    return render_template('prodi/login.html')
+
+@app.route('/logout')
+def logout():
+   session.pop('login')
+   return redirect('/login')
 
 # upload gambar
 @app.route('/upload', methods=['POST'])
@@ -46,8 +76,7 @@ def upload():
       for gambar in nama_gambar:
          daftar_hash.append(hash_file(gambar))
          os.remove(gambar)
-      
-      
+   
 
    # # insert data
    my_data = Dosen(nama_dosen, daftar_hash[0], daftar_hash[1])
@@ -101,12 +130,11 @@ def verifikasi():
                   'status': 'valid'
                })
                break
-            else:
-               hasil_verifikasi.append({
-                  'nama_dosen':dosen['nama_dosen'],
-                  'status': 'tidak_valid'
-               })
-               break
+         else:
+            hasil_verifikasi.append({
+               'nama_dosen':dosen['nama_dosen'],
+               'status': 'tidak_valid'
+            })
       
       
       hasil_akhir = (ttd_cocok, hasil_verifikasi)
