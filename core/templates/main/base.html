@@ -57,10 +57,19 @@
             <span class="docs-normal">Menu</span>
           </h6>
           <ul class="navbar-nav">
+            <!-- dashboard -->
             <li class="nav-item">
-              <a class="nav-link active" href="{{ url_for('index') }}">
+              <a class="nav-link {{ 'active' if data['active_link'] == 'dashboard' else '' }}" href="{{ url_for('index') }}">
                 <i class="ni ni-tv-2 text-primary"></i>
                 <span class="nav-link-text">Dashboard</span>
+              </a>
+            </li>
+
+            <!-- mahasiswa -->
+            <li class="nav-item">
+              <a class="nav-link {{ 'active' if data['active_link'] == 'mahasiswa' else '' }}" href="{{ url_for('show_mahasiswa') }}">
+                <i class="ni ni-tv-2 text-primary"></i>
+                <span class="nav-link-text">Mahasiswa</span>
               </a>
             </li>
             <li class="nav-item">

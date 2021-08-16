@@ -1,0 +1,357 @@
+{% extends 'main/base.html' %}
+{% block title %}
+   Prodi - Mahasiswa
+{% endblock title %}
+
+{% block css %}
+   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">
+{% endblock  %}
+
+{% block body %}
+{{data['input']}}
+<div class="row">
+   <div class="col-xl-12">
+   <div class="card">
+      <div class="card-header border-0">
+         <div class="row align-items-center">
+         <div class="col">
+            <h3 class="mb-0">Data Mahasiswa</h3>
+         </div>
+         <div class="col text-right">
+            <a href="#!" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#ttd-digital-modal">
+               Tambah data mahasiswa
+            </a>
+         </div>
+         </div>
+      </div>
+      <div class="table-responsive">
+         <!-- Projects table -->
+         <table class="table align-items-center table-flush" id="example" style="width:100%">
+            <thead class="thead-light">
+               <tr>
+                  <th scope="col">Stambuk</th>
+                  <th scope="col">Nama Mahasiswa</th>
+                  <th scope="col">Pembimbing 1</th>
+                  <th scope="col">Pembimbing 2</th>
+                  <th scope="col">Penguji 1</th>
+                  <th scope="col">Penguji 2</th>
+                  <th scope="col">Penguji 3</th>
+                  <th scope="col">Ketua Prodi</th>
+                  <th scope="col">Aksi</th>
+               </tr>
+            </thead>
+            <tbody>
+               {% for mahasiswa in data['mahasiswa'] %}
+               <tr>
+                  <td>{{ mahasiswa.stambuk }}</td>
+                  <td>{{ mahasiswa.nama}}</td>
+                  {% for dosen in data['dosen'] %}                     
+                     {% if mahasiswa.pembimbing_1 == dosen.id_dosen %}
+                        <td>{{ dosen.nama_dosen }}</td>
+                     {% endif %}
+                     {% if mahasiswa.pembimbing_2 == dosen.id_dosen %}
+                        <td>{{ dosen.nama_dosen }}</td>
+                     {% endif %}
+                     {% if mahasiswa.pembimbing_3 == dosen.id_dosen %}
+                        <td>{{ dosen.nama_dosen }}</td>
+                     {% endif %}
+                     {% if mahasiswa.penguji_1 == dosen.id_dosen %}
+                        <td>{{ dosen.nama_dosen }}</td>
+                     {% endif %}
+                     {% if mahasiswa.penguji_2 == dosen.id_dosen %}
+                        <td>{{ dosen.nama_dosen }}</td>
+                     {% endif %}
+                     {% if mahasiswa.penguji_3 == dosen.id_dosen %}
+                        <td>{{ dosen.nama_dosen }}</td>
+                     {% endif %}
+                     {% if mahasiswa.ketua_prodi == dosen.id_dosen %}
+                        <td>{{ dosen.nama_dosen }}</td>
+                     {% endif %}
+                  {% endfor %}
+                  <td>
+                     <a href="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ttd-digital-modal{{mahasiswa.stambuk}}">edit</a>
+                     <form action="{{ url_for('hapus_mahasiswa') }}" method="post" class="d-inline">
+                        <input type="hidden" name="stambuk" value="{{ mahasiswa.stambuk }}">
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Hapus data mahasiswa atas nama {{mahasiswa.nama}} ?')">hapus</button>
+                     </form>
+                  </td>
+               </tr>        
+               <!-- Modal edit mahasiswa -->
+               <div class="modal fade" id="ttd-digital-modal{{mahasiswa.stambuk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                     <div class="modal-content">
+                        <div class="modal-header">
+                           <h5 class="modal-title" id="exampleModalLabel">Form Edit Data Mahasiswa</h5>
+                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                           <span aria-hidden="true">&times;</span>
+                           </button>
+                        </div>
+                        <form action="{{ url_for('update_mahasiswa') }}"method="POST">
+                           <div class="modal-body">
+                              <!-- stambuk -->
+                              <input type="hidden" name="old-stambuk" value="{{mahasiswa.stambuk}}">
+                              <div class="form-group">
+                                 <label for="stambuk">Stambuk</label>
+                                 <input type="text" class="form-control" name="stambuk" placeholder="Masukkan stambuk" value="{{mahasiswa.stambuk}}" required>
+                              </div>
+
+                              <!-- nama mahasiswa -->
+                              <div class="form-group">
+                                 <label for="nama-dosen">Nama Mahasiswa</label>
+                                 <input type="text" class="form-control" id="nama-dosen" name="nama" placeholder="Masukkan nama mahasiswa" value="{{mahasiswa.nama}}" required>
+                              </div>
+
+                              <!-- pembimbing 1 -->
+                              <div class="form-group">
+                                 <label for="exampleFormControlSelect1">pembimbing 1</label>
+                                 <select class="form-control" name="pembimbing-1" required>
+                                    <option value="">Pilih Dosen</option>
+                                    {% for dosen in data['dosen'] %}
+                                       {% if mahasiswa.pembimbing_1 == dosen.id_dosen %}
+                                          <option value="{{ dosen.id_dosen }}" selected>{{ dosen.nama_dosen }}</option>
+                                       {% else %}
+                                          <option value="{{ dosen.id_dosen }}">{{ dosen.nama_dosen }}</option>
+                                       {% endif %}
+                                    {% endfor %}
+                                 </select>
+                              </div>
+
+                              <!-- pembimbing 2 -->
+                              <div class="form-group">
+                                 <label for="exampleFormControlSelect1">pembimbing 2</label>
+                                 <select class="form-control" name="pembimbing-2" required>
+                                    <option value="">Pilih Dosen</option>
+                                    {% for dosen in data['dosen'] %}
+                                       {% if mahasiswa.pembimbing_2 == dosen.id_dosen %}
+                                          <option value="{{ dosen.id_dosen }}" selected>{{ dosen.nama_dosen }}</option>
+                                       {% else %}
+                                          <option value="{{ dosen.id_dosen }}">{{ dosen.nama_dosen }}</option>
+                                       {% endif %}
+                                    {% endfor %}
+                                 </select>
+                              </div>
+
+                              <!-- penguji 1 -->
+                              <div class="form-group">
+                                 <label for="exampleFormControlSelect1">penguji 1</label>
+                                 <select class="form-control" name="penguji-1" required>
+                                    <option value="">Pilih Dosen</option>
+                                    {% for dosen in data['dosen'] %}
+                                       {% if mahasiswa.penguji_1 == dosen.id_dosen %}
+                                          <option value="{{ dosen.id_dosen }}" selected>{{ dosen.nama_dosen }}</option>
+                                       {% else %}
+                                          <option value="{{ dosen.id_dosen }}">{{ dosen.nama_dosen }}</option>
+                                       {% endif %}
+                                    {% endfor %}
+                                 </select>
+                              </div>
+
+                              <!-- penguji 2 -->
+                              <div class="form-group">
+                                 <label for="exampleFormControlSelect1">penguji 2</label>
+                                 <select class="form-control" name="penguji-2" required>
+                                    <option value="">Pilih Dosen</option>
+                                    {% for dosen in data['dosen'] %}
+                                       {% if mahasiswa.penguji_2 == dosen.id_dosen %}
+                                          <option value="{{ dosen.id_dosen }}" selected>{{ dosen.nama_dosen }}</option>
+                                       {% else %}
+                                          <option value="{{ dosen.id_dosen }}">{{ dosen.nama_dosen }}</option>
+                                       {% endif %}
+                                    {% endfor %}
+                                 </select>
+                              </div>
+
+                              <!-- penguji 3 -->
+                              <div class="form-group">
+                                 <label for="exampleFormControlSelect1">penguji 1</label>
+                                 <select class="form-control" name="penguji-3" required>
+                                    <option value="">Pilih Dosen</option>
+                                    {% for dosen in data['dosen'] %}
+                                       {% if mahasiswa.penguji_3 == dosen.id_dosen %}
+                                          <option value="{{ dosen.id_dosen }}" selected>{{ dosen.nama_dosen }}</option>
+                                       {% else %}
+                                          <option value="{{ dosen.id_dosen }}">{{ dosen.nama_dosen }}</option>
+                                       {% endif %}
+                                    {% endfor %}
+                                 </select>
+                              </div>
+
+                              <!-- ketua prodi -->
+                              <div class="form-group">
+                                 <label for="exampleFormControlSelect1">ketua prodi</label>
+                                 <select class="form-control" name="ketua-prodi" required>
+                                    <option value="">Pilih Dosen</option>
+                                    {% for dosen in data['dosen'] %}
+                                       {% if mahasiswa.ketua_prodi == dosen.id_dosen %}
+                                          <option value="{{ dosen.id_dosen }}" selected>{{ dosen.nama_dosen }}</option>
+                                       {% else %}
+                                          <option value="{{ dosen.id_dosen }}">{{ dosen.nama_dosen }}</option>
+                                       {% endif %}
+                                    {% endfor %}
+                                 </select>
+                              </div>
+                           </div>            
+                           <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup Form</button>
+                              <button type="submit" class="btn btn-success">Ubah</button>
+                           </div>
+                        </form>
+                     </div>
+                  </div>
+               </div>          
+               {% endfor %}
+            </tbody>
+         </table>
+      </div>
+   </div>
+   </div>
+</div>
+
+<!-- Modal tambah mahasiswa -->
+<div class="modal fade" id="ttd-digital-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+   <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Form Tambah Data Mahasiswa</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <form action="{{ url_for('tambah_mahasiswa') }}"method="POST">
+            <div class="modal-body">
+               <!-- nama dosen -->
+               <div class="form-group">
+                  <label for="stambuk">Stambuk</label>
+                  <input type="text" class="form-control" id="nama-dosen" name="stambuk" placeholder="Masukkan stambuk" required>
+               </div>
+
+               <!-- nama mahasiswa -->
+               <div class="form-group">
+                  <label for="nama-dosen">Nama Mahasiswa</label>
+                  <input type="text" class="form-control" id="nama-dosen" name="nama" placeholder="Masukkan nama mahasiswa" required>
+               </div>
+
+               <!-- pembimbing 1 -->
+               <div class="form-group">
+                  <label for="exampleFormControlSelect1">pembimbing 1</label>
+                  <select class="form-control" name="pembimbing-1" required>
+                     <option value="">Pilih Dosen</option>
+                     {% for dosen in data['dosen'] %}
+                        <option value="{{ dosen.id_dosen }}">{{ dosen.nama_dosen }}</option>
+                     {% endfor %}
+                  </select>
+               </div>
+
+               <!-- pembimbing 2 -->
+               <div class="form-group">
+                  <label for="exampleFormControlSelect1">pembimbing 2</label>
+                  <select class="form-control" name="pembimbing-2" required>
+                     <option value="">Pilih Dosen</option>
+                     {% for dosen in data['dosen'] %}
+                        <option value="{{ dosen.id_dosen }}">{{ dosen.nama_dosen }}</option>
+                     {% endfor %}
+                  </select>
+               </div>
+
+               <!-- penguji 1 -->
+               <div class="form-group">
+                  <label for="exampleFormControlSelect1">penguji 1</label>
+                  <select class="form-control" name="penguji-1" required>
+                     <option value="">Pilih Dosen</option>
+                     {% for dosen in data['dosen'] %}
+                        <option value="{{ dosen.id_dosen }}">{{ dosen.nama_dosen }}</option>
+                     {% endfor %}
+                  </select>
+               </div>
+
+               <!-- penguji 2 -->
+               <div class="form-group">
+                  <label for="exampleFormControlSelect1">penguji 2</label>
+                  <select class="form-control" name="penguji-2" required>
+                     <option value="">Pilih Dosen</option>
+                     {% for dosen in data['dosen'] %}
+                        <option value="{{ dosen.id_dosen }}">{{ dosen.nama_dosen }}</option>
+                     {% endfor %}
+                  </select>
+               </div>
+
+               <!-- penguji 3 -->
+               <div class="form-group">
+                  <label for="exampleFormControlSelect1">penguji 1</label>
+                  <select class="form-control" name="penguji-3" required>
+                     <option value="">Pilih Dosen</option>
+                     {% for dosen in data['dosen'] %}
+                        <option value="{{ dosen.id_dosen }}">{{ dosen.nama_dosen }}</option>
+                     {% endfor %}
+                  </select>
+               </div>
+
+               <!-- ketua prodi -->
+               <div class="form-group">
+                  <label for="exampleFormControlSelect1">ketua prodi</label>
+                  <select class="form-control" name="ketua-prodi" required>
+                     <option value="">Pilih Dosen</option>
+                     {% for dosen in data['dosen'] %}
+                        <option value="{{ dosen.id_dosen }}">{{ dosen.nama_dosen }}</option>
+                     {% endfor %}
+                  </select>
+               </div>
+            </div>            
+            <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup Form</button>
+               <button type="submit" class="btn btn-success">Simpan</button>
+            </div>
+         </form>
+      </div>
+   </div>
+</div>
+{% endblock  %}
+
+{% block javascript %}
+   <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+   <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+   <script>
+      $(document).ready(function() {
+         $('#example').DataTable();
+      });
+   </script>
+
+   <!-- flash -->
+   {% with messages = get_flashed_messages()  %}
+      {% if messages %}
+         {% for message in messages %}
+            {% if message == 'error' %}
+               <script>
+                  Swal.fire({
+                     position: 'center',
+                     icon: 'error',
+                     title: 'data mahasiswa gagal ditambahkan',
+                     showConfirmButton: false,
+                     timer: 2000
+                  })
+               </script>
+            {% else %}
+               <script>
+                  Swal.fire({
+                     position: 'center',
+                     icon: 'success',
+                     title: '{{ message }}',
+                     showConfirmButton: false,
+                     timer: 2000
+                  })
+               </script>
+            {% endif %}
+         {% endfor %}
+      {% endif %}
+   {% endwith  %}
+
+   <!-- error handler -->
+   {% if data['input'] %}
+   <script type="text/javascript">
+      $(window).on('load', function() {
+          $('#ttd-digital-modal').modal('show');
+      });
+  </script>
+   {% endif %}
+{% endblock  %}

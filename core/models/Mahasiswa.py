@@ -24,3 +24,43 @@ class Mahasiswa(db.Model):
    @classmethod
    def getByStambuk(cls, input_stambuk):
       return cls.query.filter_by(stambuk=input_stambuk).first()
+   
+   @classmethod
+   def getAll(cls):
+      return cls.query.all()
+   
+   @classmethod
+   def insert(cls, data):
+      # # insert data
+      my_data = cls(
+         data['stambuk'],
+         data['nama'],
+         data['pembimbing_1'],
+         data['pembimbing_2'],
+         data['penguji_1'],
+         data['penguji_2'],
+         data['penguji_3'],
+         data['ketua_prodi'],
+      )
+      db.session.add(my_data)
+      db.session.commit()
+   @classmethod
+   def update(cls, stambuk, data):
+      my_data = cls.query.get(stambuk)
+      
+      my_data.stambuk = data['stambuk']
+      my_data.nama = data['nama']
+      my_data.pembimbing_1 =data['pembimbing_1']
+      my_data.pembimbing_2 =data['pembimbing_2']
+      my_data.penguji_1 =data['penguji_1']
+      my_data.penguji_2 =data['penguji_2']
+      my_data.penguji_3 =data['penguji_3']
+      my_data.ketua_prodi =data['ketua_prodi']
+      
+      db.session.commit()
+      
+   @classmethod
+   def delete(cls, stambuk):
+      my_data = cls.query.get(stambuk)
+      db.session.delete(my_data)
+      db.session.commit()

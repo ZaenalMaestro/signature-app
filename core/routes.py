@@ -15,11 +15,16 @@ import os
 # ================ prodi ================ 
 @app.route('/')
 def index():
-   if not session.get('login'):
-      return redirect('/login')
+   # if not session.get('login'):
+   #    return redirect('/login')
+   
+   data = {
+      'dosen': Dosen.query.all(),
+      'active_link': 'dashboard'
+   }
    
    data_dosen = Dosen.query.all()
-   return render_template('prodi/dashboard.html', data_dosen = data_dosen)
+   return render_template('prodi/dashboard.html', data = data)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -87,6 +92,67 @@ def upload():
    flash('Tanda Tangan digital berhasil dibuat')
       
    return redirect(url_for('index'))
+
+# menu mahasiswa
+@app.route('/mahasiswa')
+def show_mahasiswa():
+   # if not session.get('login'):
+   #    return redirect('/login')
+   
+   data = {
+      'mahasiswa': Mahasiswa.getAll(),
+      'dosen': Dosen.query.all(),
+      'active_link': 'mahasiswa'
+   }
+   return render_template('prodi/mahasiswa.html', data = data)
+
+# menu mahasiswa - tambah data
+@app.route('/addmahasiswa', methods=['POST'])
+def tambah_mahasiswa():
+   data_input = {
+      'stambuk': request.form['stambuk'],
+      'nama': request.form['nama'],
+      'pembimbing_1': request.form['pembimbing-1'],
+      'pembimbing_2': request.form['pembimbing-2'],
+      'penguji_1': request.form['penguji-1'],
+      'penguji_2': request.form['penguji-2'],
+      'penguji_3': request.form['penguji-3'],
+      'ketua_prodi': request.form['ketua-prodi']
+   }
+   
+   mahasiswa = Mahasiswa.getByStambuk(data_input['stambuk'])
+   if not mahasiswa: # tambah data jika stambuk belum terdaftar
+      Mahasiswa.insert(data_input)
+      flash('data mahasiswa berhasil ditambahkan')
+      return redirect('/mahasiswa')
+   else:
+      flash('error')
+      return redirect('/mahasiswa')
+   
+# update mahasiswa
+@app.route('/updatemahasiswa', methods=['POST'])
+def update_mahasiswa():
+   data_input = {
+      'stambuk': request.form['stambuk'],
+      'nama': request.form['nama'],
+      'pembimbing_1': request.form['pembimbing-1'],
+      'pembimbing_2': request.form['pembimbing-2'],
+      'penguji_1': request.form['penguji-1'],
+      'penguji_2': request.form['penguji-2'],
+      'penguji_3': request.form['penguji-3'],
+      'ketua_prodi': request.form['ketua-prodi']
+   }
+   Mahasiswa.update(request.form['old-stambuk'], data_input)
+   flash('data mahasiswa berhasil diubah')
+   return redirect('/mahasiswa')
+   
+# hapus mahasiswa
+@app.route('/hapusmahasiswa', methods=['POST'])
+def hapus_mahasiswa():
+   Mahasiswa.delete(request.form['stambuk'])
+   flash('data mahasiswa berhasil dihapus')
+   return redirect('/mahasiswa')
+
 
 
 # ================ verifikasi, mahasiswa ================ 
