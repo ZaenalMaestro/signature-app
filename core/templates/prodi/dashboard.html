@@ -38,14 +38,52 @@
             <tbody>
                {% for row in data['dosen'] %}                  
                <tr>
-                  <th scope="row">{{row.id_dosen}}</th>
+                  <th scope="row">{{ loop.index }}</th>
                   <th scope="row">{{ row.nama_dosen }}</th>
                   <th scope="row">{{ row.tanda_tangan_digital_1 }}</th>
                   <th scope="row">{{ row.tanda_tangan_digital_2 }}</th>
                   <th scope="row">
-                     <button type="button" class="btn btn-danger btn-sm">Hapus</button>
+                     <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ttd-digital-ubah{{row.id_dosen}}">
+                        ubah
+                     </button>
                   </th>
                </tr>
+               <!-- Modal ubah-->
+               <div class="modal fade" id="ttd-digital-ubah{{row.id_dosen}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                     <div class="modal-content">
+                        <div class="modal-header">
+                           <h5 class="modal-title" id="exampleModalLabel">Form Ubah Tanda Tangan Digital</h5>
+                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                           <span aria-hidden="true">&times;</span>
+                           </button>
+                        </div>
+                        <form action="{{ url_for('update_ttd_digital') }}" enctype="multipart/form-data" method="POST">
+                           <div class="modal-body">
+                              <!-- id dosen -->
+                              <input type="hidden" name="id-dosen" value="{{ row.id_dosen }}">
+                              <input type="hidden" name="hash-1" value="{{ row.tanda_tangan_digital_1 }}">
+                              <input type="hidden" name="hash-2" value="{{ row.tanda_tangan_digital_2 }}">
+                              <!-- nama dosen -->
+                              <div class="form-group">
+                                 <label for="nama-dosen">Nama Dosen</label>
+                                 <input type="text" class="form-control" id="nama-dosen" name="nama-dosen" placeholder="Masukkan nama dosen" value="{{row.nama_dosen}}" required>
+                              </div>
+
+                              <!-- tanda tangan dosen -->
+                              <div class="form-group">
+                                 <label>File Tanda Tangan</label>
+                                 <input type="file" class="form-control" name="file-update">
+                              </div>
+                           </div>
+                           <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup Form</button>
+                              <button type="submit" class="btn btn-success">Ubah</button>
+                           </div>
+                        </form>
+                     </div>
+                  </div>
+               </div>
                {% endfor %}
             </tbody>
          </table>
@@ -73,10 +111,9 @@
                </div>
 
                <!-- tanda tangan dosen -->
-               <label for="exampleFormControlInput1">File Tanda Tangan</label>
-               <div class="custom-file">
-                  <input type="file" class="custom-file-input d-none" id="customFile" name="file">
-                  <label class="custom-file-label" for="customFile">Pilih file</label>
+               <div class="form-group">
+                  <label>File Tanda Tangan</label>
+                  <input type="file" class="form-control" name="file">
                </div>
             </div>
             <div class="modal-footer">

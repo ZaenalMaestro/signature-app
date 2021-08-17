@@ -1,3 +1,4 @@
+import re
 from threading import main_thread
 from flask import render_template, request, redirect, flash, session
 from flask.helpers import url_for
@@ -64,33 +65,58 @@ def upload():
    # get request
    file = request.files['file']
    filename = secure_filename(file.filename)
-   nama_dosen = request.form['nama-dosen']
-      
+   nama_dosen = request.form['nama-dosen']   
    
    if 'file' not in request.files or filename == '':
       return redirect(url_for('index'))
    
    if file and allowed_file(filename):
       filename = secure_filename(filename)
-      file.save(os.path.join('uploads/prodi', filename))
+      path = os.path.join('uploads/prodi', filename)
+      file.save(path)
       
       # ekstrak gambar dari file pdf
-      nama_gambar = ekstrakGambar(os.path.join('uploads/prodi', filename))
-      
-      daftar_hash = []
-      for gambar in nama_gambar:
-         daftar_hash.append(hash_file(gambar))
-         os.remove(gambar)
+      nama_gambar = ekstrakGambar(path)
+      # hapus file 
+      os.remove(path)
+      # get nilai hash semua gambar
+      daftar_hash = get_nilai_hash(nama_gambar)    
    
 
    # # insert data
-   my_data = Dosen(nama_dosen, daftar_hash[0], daftar_hash[1])
-   db.session.add(my_data)
-   db.session.commit()
-   
+   Dosen.insert(nama_dosen, daftar_hash)   
    # set flash
-   flash('Tanda Tangan digital berhasil dibuat')
+   flash('Tanda Tangan digital berhasil dibuat')      
+   return redirect(url_for('index'))
+
+# update ttd digital
+# upload gambar
+@app.route('/update_upload', methods=['POST'])
+def update_ttd_digital():
+   # get request
+   file = request.files['file-update']
+   filename = secure_filename(file.filename)
+   id_dosen = request.form['id-dosen']
+   nama_dosen = request.form['nama-dosen']
+   
+   if file and allowed_file(filename):
+      filename = secure_filename(filename)
+      path = os.path.join('uploads/prodi', filename)
+      file.save(path)
       
+      # ekstrak gambar dari file pdf
+      nama_gambar = ekstrakGambar(path)
+      # hapus file setelah ekstrak gambar
+      os.remove(path)
+      # get nilai hash semua gambar
+      daftar_hash = get_nilai_hash(nama_gambar)       
+   else:
+      daftar_hash = [request.form['hash-1'], request.form['hash-2']]
+   
+   # update data
+   Dosen.update(id_dosen, nama_dosen, daftar_hash)
+   # set flash
+   flash('Data berhasil diubah')  
    return redirect(url_for('index'))
 
 # menu mahasiswa

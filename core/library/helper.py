@@ -65,9 +65,10 @@ def get_nilai_hash(nama_gambar):
    for gambar in nama_gambar:
       daftar_hash.append(hash_file(gambar))
       os.remove(gambar)
+   if len(daftar_hash) == 1:
+         daftar_hash.append(daftar_hash[0])    
    return daftar_hash
 
 def hash_password(password):
    h = hashlib.sha256(password.encode())
    return h.hexdigest()
-

@@ -11,3 +11,17 @@ class Dosen(db.Model):
       self.tanda_tangan_digital_1 = tanda_tangan_digital_1
       self.tanda_tangan_digital_2 = tanda_tangan_digital_2
       
+   @classmethod
+   def insert(cls, nama_dosen, daftar_hash):
+      data = cls(nama_dosen, daftar_hash[0], daftar_hash[1])
+      db.session.add(data)
+      db.session.commit()
+      
+   @classmethod
+   def update(cls, id_dosen, nama_dosen, daftar_hash):
+      data = cls.query.get(id_dosen)
+      data.nama_dosen = nama_dosen
+      data.tanda_tangan_digital_1 = daftar_hash[0]
+      data.tanda_tangan_digital_2 = daftar_hash[1]
+      db.session.commit()
+      
