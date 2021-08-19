@@ -3,7 +3,7 @@ from threading import main_thread
 from flask import render_template, request, redirect, flash, session
 from flask.helpers import url_for
 from werkzeug.utils import secure_filename
-from .model import Dosen
+from .models.Dosen import *
 from .models.Mahasiswa import *
 from .models.Prodi import *
 from core import app, db
@@ -11,6 +11,7 @@ from .library.helper import (
    ekstrakGambar, get_nilai_hash, hash_file, 
    allowed_file, upload_file, get_id_dosen, hash_password
 )
+from .library.rsa import chipertext_to_str, enkripsi, dekripsi, str_to_chipertext
 import os
 
 # ================ prodi ================ 
@@ -80,11 +81,15 @@ def upload():
       # hapus file 
       os.remove(path)
       # get nilai hash semua gambar
-      daftar_hash = get_nilai_hash(nama_gambar)    
+      daftar_hash = get_nilai_hash(nama_gambar)
+      data = []
+      for nilai_hash in daftar_hash:
+         chipertext = enkripsi(nilai_hash)
+         data.append(chipertext_to_str(chipertext))
    
 
    # # insert data
-   Dosen.insert(nama_dosen, daftar_hash)   
+   Dosen.insert(nama_dosen, data)   
    # set flash
    flash('Tanda Tangan digital berhasil dibuat')      
    return redirect(url_for('index'))
@@ -109,12 +114,16 @@ def update_ttd_digital():
       # hapus file setelah ekstrak gambar
       os.remove(path)
       # get nilai hash semua gambar
-      daftar_hash = get_nilai_hash(nama_gambar)       
+      daftar_hash = get_nilai_hash(nama_gambar)
+      data = []
+      for nilai_hash in daftar_hash:
+         chipertext = enkripsi(nilai_hash)
+         data.append(chipertext_to_str(chipertext))
    else:
-      daftar_hash = [request.form['hash-1'], request.form['hash-2']]
+      data = [request.form['hash-1'], request.form['hash-2']]
    
    # update data
-   Dosen.update(id_dosen, nama_dosen, daftar_hash)
+   Dosen.update(id_dosen, nama_dosen, data)
    # set flash
    flash('Data berhasil diubah')  
    return redirect(url_for('index'))
@@ -204,10 +213,13 @@ def verifikasi():
       for id in id_dosen:
          # get data dosen
          row = Dosen.query.filter_by(id_dosen=id).first()
+         # dekripsi
+         tanda_tangan_digital_1 = str_to_chipertext(row.tanda_tangan_digital_1)
+         tanda_tangan_digital_2 = str_to_chipertext(row.tanda_tangan_digital_2)
          hash_dosen.append({
             'nama_dosen': row.nama_dosen,
-            'tanda_tangan_digital_1': row.tanda_tangan_digital_1,
-            'tanda_tangan_digital_2': row.tanda_tangan_digital_2
+            'hash_1': dekripsi(tanda_tangan_digital_1),
+            'hash_2': dekripsi(tanda_tangan_digital_2)
          })
       
       
@@ -215,7 +227,7 @@ def verifikasi():
       hasil_verifikasi = list()
       for dosen in hash_dosen:
          for mhs in daftar_hash:
-            if dosen['tanda_tangan_digital_1'] == mhs or dosen['tanda_tangan_digital_2'] == mhs:
+            if dosen['hash_1'] == mhs or dosen['hash_2'] == mhs:
                ttd_cocok += 1
                hasil_verifikasi.append({
                   'nama_dosen':dosen['nama_dosen'],
@@ -231,8 +243,5 @@ def verifikasi():
       
       hasil_akhir = (ttd_cocok, hasil_verifikasi)
       return render_template('verifikasi/verifikasi.html', hasil_akhir=hasil_akhir)
-
-      
-      return 'tanda tangan yang cocok adalah '+ str(ttd_cocok)
 
    return render_template('verifikasi/verifikasi.html')

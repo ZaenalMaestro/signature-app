@@ -48,8 +48,7 @@
          </div>
       </div>
 
-      {% if hasil_akhir %}
-      
+      {% if hasil_akhir %}      
       <!-- Modal -->
       <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
          <div class="modal-dialog modal-dialog-centered" role="document">
@@ -65,7 +64,7 @@
                      <thead>
                         <tr>
                            <th scope="col">Nama Dosen</th>
-                           <th scope="col" class="text-center">Status Tanda Tangan</th>
+                           <th scope="col" class="text-center">Verifikasi Tanda Tangan</th>
                         </tr>
                      </thead>
                      <tbody>
@@ -78,16 +77,6 @@
                         </tr>
                         {% endfor %}
                      </tbody>
-                     <tfoot>
-                        <tr>
-                           <th>Keterangan</th>
-                           {% if hasil_akhir[0] >= 6 %}
-                              <th class="text-center">Skripsi Berhasil diverifikasi</th>
-                           {% else %}
-                              <th class="text-center">Skripsi Gagal diverifikasi</h6>                     
-                           {% endif %}
-                        </tr>
-                     </tfoot>
                   </table>
                   
                </div>

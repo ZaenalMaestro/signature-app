@@ -40,14 +40,15 @@
                <tr>
                   <th scope="row">{{ loop.index }}</th>
                   <th scope="row">{{ row.nama_dosen }}</th>
-                  <th scope="row">{{ row.tanda_tangan_digital_1 }}</th>
-                  <th scope="row">{{ row.tanda_tangan_digital_2 }}</th>
+                  <th scope="row">{{ row.tanda_tangan_digital_1[:30] }}...</th>
+                  <th scope="row">{{ row.tanda_tangan_digital_2[:30] }}...</th>
                   <th scope="row">
                      <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ttd-digital-ubah{{row.id_dosen}}">
                         ubah
                      </button>
                   </th>
                </tr>
+               
                <!-- Modal ubah-->
                <div class="modal fade" id="ttd-digital-ubah{{row.id_dosen}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div class="modal-dialog" role="document">
