@@ -17,15 +17,13 @@ import os
 # ================ prodi ================ 
 @app.route('/')
 def index():
-   # if not session.get('login'):
-   #    return redirect('/login')
+   if not session.get('login'):
+      return redirect('/login')
    
    data = {
       'dosen': Dosen.query.all(),
       'active_link': 'dashboard'
    }
-   
-   data_dosen = Dosen.query.all()
    return render_template('prodi/dashboard.html', data = data)
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -131,8 +129,8 @@ def update_ttd_digital():
 # menu mahasiswa
 @app.route('/mahasiswa')
 def show_mahasiswa():
-   # if not session.get('login'):
-   #    return redirect('/login')
+   if not session.get('login'):
+      return redirect('/login')
    
    data = {
       'mahasiswa': Mahasiswa.getAll(),
@@ -199,11 +197,14 @@ def verifikasi():
       input_stambuk = request.form['stambuk']     
       file = request.files['file-skripsi']
       filename = secure_filename(file.filename)
+      path = os.path.join('uploads/verifikasi', filename)
       upload_file('uploads/verifikasi', file)
          
       # # ekstrak gambar dari file pdf
-      nama_gambar = ekstrakGambar(os.path.join('uploads/verifikasi', filename))
+      nama_gambar = ekstrakGambar(path)
       daftar_hash = get_nilai_hash(nama_gambar)
+      # hapus file 
+      os.remove(path)
       
       # get data mahasiswa by stambuk
       mahasiswa = Mahasiswa.getByStambuk(input_stambuk)
