@@ -51,9 +51,10 @@ def generate_d(tau_n, e):
 
 
 def enkripsi(plaintext):
+   # private key (d, n)
    global tau_n, n
-   # kunci enkripsi
-   kunci_enkripsi = generate_e(tau_n)
+   e = generate_e(tau_n)
+   d = generate_d(tau_n, e)
    
    # convert plaintext ke ASCII
    nilai_ascii = []
@@ -63,18 +64,19 @@ def enkripsi(plaintext):
    # enkripsi
    chipertext = []
    for nilai in nilai_ascii:
-      enkripsi = (nilai**kunci_enkripsi) % n
+      enkripsi = (nilai**d) % n
       chipertext.append(enkripsi)
    return tuple(chipertext)
 
 def dekripsi(chipertext):
+   # public key (e, n)
    global tau_n, n
    # nilai dekripsi
-   kunci_dekripsi = generate_d(tau_n, generate_e(tau_n))
+   e = generate_e(tau_n)
    plaintext = []
    
    for chiper in chipertext:
-      enkripsi = (chiper**kunci_dekripsi) % n
+      enkripsi = (chiper**e) % n
       plaintext.append(enkripsi)
    teks = ''.join(map(chr, plaintext))
    return teks

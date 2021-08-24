@@ -42,8 +42,8 @@
     <div class="scrollbar-inner">
       <!-- Brand -->
       <div class="sidenav-header  align-items-center">
-        <a class="navbar-brand" href="javascript:void(0)">
-          <img src="{{ url_for('static', filename='assets/img/brand/blue.png') }}" class="navbar-brand-img" alt="...">
+        <a class="navbar ml-5" href="javascript:void(0)">
+          <img src="{{ url_for('static', filename='assets/img/theme/profile.png') }}" class="rounded-circle" alt="..." width="60">
         </a>
       </div>
       <div class="navbar-inner">
@@ -114,10 +114,10 @@
               <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <div class="media align-items-center">
                   <span class="avatar avatar-sm rounded-circle">
-                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/team-4.jpg') }}">
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/profile.png') }}">
                   </span>
                   <div class="media-body  ml-2  d-none d-lg-block">
-                    <span class="mb-0 text-sm  font-weight-bold">John Snow</span>
+                    <span class="mb-0 text-sm  font-weight-bold">Prodi</span>
                   </div>
                 </div>
               </a>
@@ -126,9 +126,9 @@
                   <h6 class="text-overflow m-0">Jhon Snow</h6>
                 </div>
                 <div class="dropdown-divider"></div>
-                <a href="#!" class="dropdown-item">
+                <a href="{{ url_for('logout') }}" class="dropdown-item">
                   <i class="ni ni-user-run"></i>
-                  <span>Logout</span>
+                  <span>logout</span>
                 </a>
               </div>
             </li>
