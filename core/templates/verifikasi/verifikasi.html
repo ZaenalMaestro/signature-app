@@ -16,6 +16,19 @@
       </style>
    </head>
    <body>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+         <div class="container">
+            <a class="navbar-brand" href="#">Muhammad Akbar</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+               <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+               <div class="navbar-nav ml-auto">
+                  <a class="nav-item nav-link active" href="{{ url_for('login') }}">Login <span class="sr-only">(current)</span></a>
+               </div>
+            </div>
+         </div>
+      </nav>
       <div class="container">
          <div class="row">
             <div class="col px-5">
@@ -27,15 +40,19 @@
                      <form action="{{ url_for('verifikasi') }}" method="POST" enctype="multipart/form-data">
                         <div class="form-group mb-4">
                            <label for="stambuk">Stambuk</label>
-                           <input type="number" class="form-control" name="stambuk" id="stambuk" placeholder="Masukkan stambuk" autofocus required>
-                        </div>
-                        <label for="exampleInputEmail1">File Skripsi</label>
-                        <div class="input-group">
-                           <div class="custom-file">
-                              <input type="file" class="custom-file-input" name="file-skripsi" id="fileSkripsi" required max="12">
-                              <label class="custom-file-label" for="fileSkripsi">Pilih File Skripsi <i>(.pdf)</i></label>
+                           <input type="number" class="form-control {{ 'is-invalid' if get_flashed_messages()[0] == 'stambuk_invalid'}}" name="stambuk" id="stambuk" placeholder="Masukkan stambuk" autofocus required value="{{stambuk}}">
+                           <div class="invalid-feedback">
+                              Stambuk belum terdaftar oleh sistem
                            </div>
                         </div>
+                        <label for="exampleInputEmail1">File Skripsi</label>
+                           <div class="custom-file">
+                              <input type="file" class="custom-file-input {{ 'is-invalid' if get_flashed_messages()[0] == 'invalid_extension'}}" name="file-skripsi" id="fileSkripsi" required max="12">
+                              <label class="custom-file-label" for="fileSkripsi">Pilih File Skripsi <i>(.pdf)</i></label>
+                              <div class="invalid-feedback">
+                                 File harus berekstensi pdf
+                              </div>
+                           </div>
                         <div class="row mt-5">
                            <div class="col">
                               <button type="submit" class="btn btn-primary float-right">Verifikasi Skripsi</button>
@@ -95,7 +112,7 @@
       <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-
+      <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
       <script type="text/javascript">
          $(window).on('load', function() {
             $('#exampleModal').modal('show');

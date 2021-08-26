@@ -64,6 +64,7 @@ def upload():
    # get request
    file = request.files['file']
    filename = secure_filename(file.filename)
+   split_file = filename.split('.')
    nama_dosen = request.form['nama-dosen']   
    
    if 'file' not in request.files or filename == '':
@@ -189,14 +190,18 @@ def hapus_mahasiswa():
 
 
 # ================ verifikasi, mahasiswa ================ 
-
-
 @app.route('/verifikasi', methods=['GET', 'POST'])
 def verifikasi():
    if request.method == 'POST':
       input_stambuk = request.form['stambuk']     
       file = request.files['file-skripsi']
       filename = secure_filename(file.filename)
+      nama_file, extension = filename.split('.')
+      
+      if extension != 'pdf':
+         flash('invalid_extension')
+         return render_template('verifikasi/verifikasi.html', stambuk=input_stambuk)
+      
       path = os.path.join('uploads/verifikasi', filename)
       upload_file('uploads/verifikasi', file)
          
@@ -208,6 +213,10 @@ def verifikasi():
       
       # get data mahasiswa by stambuk
       mahasiswa = Mahasiswa.getByStambuk(input_stambuk)
+      if not mahasiswa:
+         flash('stambuk_invalid')
+         return render_template('verifikasi/verifikasi.html', stambuk=input_stambuk)
+      
       id_dosen = get_id_dosen(mahasiswa)
       
       hash_dosen = list()

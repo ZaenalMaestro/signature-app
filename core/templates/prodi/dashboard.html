@@ -74,12 +74,15 @@
                               <!-- tanda tangan dosen -->
                               <div class="form-group">
                                  <label>File Tanda Tangan</label>
-                                 <input type="file" class="form-control" name="file-update">
+                                 <input type="file" class="form-control" name="file-update" id="file-tanda-tangan-update">
+                                 <div class="invalid-feedback">
+                                    File harus berekstensi pdf
+                                 </div>
                               </div>
                            </div>
                            <div class="modal-footer">
                               <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup Form</button>
-                              <button type="submit" class="btn btn-success">Ubah</button>
+                              <button type="submit" class="btn btn-success tombol-update">Ubah</button>
                            </div>
                         </form>
                      </div>
@@ -108,18 +111,21 @@
                <!-- nama dosen -->
                <div class="form-group">
                   <label for="nama-dosen">Nama Dosen</label>
-                  <input type="text" class="form-control" id="nama-dosen" name="nama-dosen" placeholder="Masukkan nama dosen">
+                  <input type="text" class="form-control" id="nama-dosen" name="nama-dosen" placeholder="Masukkan nama dosen" required>
                </div>
 
                <!-- tanda tangan dosen -->
                <div class="form-group">
                   <label>File Tanda Tangan</label>
-                  <input type="file" class="form-control" name="file">
+                  <input type="file" class="form-control" name="file" id="file-tanda-tangan" required>
+                  <div class="invalid-feedback">
+                     File harus berekstensi pdf
+                  </div>
                </div>
             </div>
             <div class="modal-footer">
                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup Form</button>
-               <button type="submit" class="btn btn-success">Buat Tanda Tangan Digital</button>
+               <button type="submit" class="btn btn-success tombol-simpan">Buat Tanda Tangan Digital</button>
             </div>
          </form>
       </div>
@@ -135,6 +141,34 @@
       $(document).ready(function() {
          $('#example').DataTable();
       });
+      function allowed_extension(filename, form, tombol)
+      {
+         my_array = filename.split('.')
+         if(my_array[1] !== 'pdf'){
+            form.classList.add('is-invalid')
+            tombol.setAttribute('type', 'button')          
+         }else{
+            form.classList.remove('is-invalid')
+            tombol.setAttribute('type', 'submit')    
+         }
+      }
+      $('#file-tanda-tangan').on('change',function(e){
+         if (e.target.files.length) {
+            filename = e.target.files[0].name
+            form = document.querySelector('#file-tanda-tangan')
+            tombol = document.querySelector('.tombol-simpan')   
+            allowed_extension(filename, form, tombol)
+         }
+      })
+
+      $('#file-tanda-tangan-update').on('change',function(e){
+         if (e.target.files.length) {
+            filename = e.target.files[0].name
+            form = document.querySelector('#file-tanda-tangan-update')
+            tombol = document.querySelector('.tombol-update')   
+            allowed_extension(filename, form, tombol)
+         }
+      })
    </script>
 
    <!-- flash -->
