@@ -77,8 +77,8 @@ def dekripsi(chipertext):
    plaintext = []
    
    for chiper in chipertext:
-      enkripsi = (chiper**e) % n
-      plaintext.append(enkripsi)
+      dekripsi_chipertext = (chiper**e) % n
+      plaintext.append(dekripsi_chipertext)
    teks = ''.join(map(chr, plaintext))
    return teks
 
