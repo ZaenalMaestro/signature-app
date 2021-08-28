@@ -1,4 +1,3 @@
-import re
 from threading import main_thread
 from flask import render_template, request, redirect, flash, session
 from flask.helpers import url_for
@@ -166,6 +165,12 @@ def tambah_mahasiswa():
 # update mahasiswa
 @app.route('/updatemahasiswa', methods=['POST'])
 def update_mahasiswa():
+   if request.form['old-stambuk'] != request.form['stambuk']:
+      row = Mahasiswa.getByStambuk(request.form['stambuk'])
+      if row:
+         flash('error')
+         return redirect('/mahasiswa')
+      
    data_input = {
       'stambuk': request.form['stambuk'],
       'nama': request.form['nama'],

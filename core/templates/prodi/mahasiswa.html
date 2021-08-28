@@ -163,7 +163,7 @@
 
                               <!-- penguji 3 -->
                               <div class="form-group">
-                                 <label for="exampleFormControlSelect1">penguji 1</label>
+                                 <label for="exampleFormControlSelect1">penguji 3</label>
                                  <select class="form-control" name="penguji-3" required>
                                     <option value="">Pilih Dosen</option>
                                     {% for dosen in data['dosen'] %}
@@ -277,7 +277,7 @@
 
                <!-- penguji 3 -->
                <div class="form-group">
-                  <label for="exampleFormControlSelect1">penguji 1</label>
+                  <label for="exampleFormControlSelect1">penguji 3</label>
                   <select class="form-control" name="penguji-3" required>
                      <option value="">Pilih Dosen</option>
                      {% for dosen in data['dosen'] %}
@@ -326,9 +326,9 @@
                   Swal.fire({
                      position: 'center',
                      icon: 'error',
-                     title: 'data mahasiswa gagal ditambahkan',
+                     title: 'data mahasiswa gagal ditambahkan, stambuk telah terdaftar',
                      showConfirmButton: false,
-                     timer: 2000
+                     timer: 3000
                   })
                </script>
             {% else %}
