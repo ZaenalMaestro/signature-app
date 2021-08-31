@@ -55,7 +55,7 @@
                            </div>
                         <div class="row mt-5">
                            <div class="col">
-                              <button type="submit" class="btn btn-primary float-right">Verifikasi Skripsi</button>
+                              <button type="submit" class="btn btn-primary float-right tombol-simpan">Verifikasi Skripsi</button>
                            </div>
                         </div>                        
                      </form>
@@ -121,6 +121,27 @@
          $('#fileSkripsi').on('change',function(e){
             if (e.target.files.length) {
                $(this).next('.custom-file-label').html(e.target.files[0].name);
+            }
+         })
+      </script>
+      <script>
+         function allowed_extension(filename, form, tombol)
+         {
+            my_array = filename.split('.')
+            if(my_array[1] !== 'pdf'){
+               form.classList.add('is-invalid')
+               tombol.setAttribute('type', 'button')          
+            }else{
+               form.classList.remove('is-invalid')
+               tombol.setAttribute('type', 'submit')    
+            }
+         }
+         $('#fileSkripsi').on('change',function(e){
+            if (e.target.files.length) {
+               filename = e.target.files[0].name
+               form = document.querySelector('#fileSkripsi')
+               tombol = document.querySelector('.tombol-simpan')   
+               allowed_extension(filename, form, tombol)
             }
          })
       </script>
