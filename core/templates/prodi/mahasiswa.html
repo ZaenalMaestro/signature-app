@@ -36,6 +36,7 @@
                   <th scope="col">Penguji 1</th>
                   <th scope="col">Penguji 2</th>
                   <th scope="col">Penguji 3</th>
+                  <th scope="col">Ketua Sidang</th>
                   <th scope="col">Ketua Prodi</th>
                   <th scope="col">Aksi</th>
                </tr>
@@ -45,29 +46,56 @@
                <tr>
                   <td>{{ mahasiswa.stambuk }}</td>
                   <td>{{ mahasiswa.nama}}</td>
-                  {% for dosen in data['dosen'] %}                     
-                     {% if mahasiswa.pembimbing_1 == dosen.id_dosen %}
-                        <td>{{ dosen.nama_dosen }}</td>
-                     {% endif %}
-                     {% if mahasiswa.pembimbing_2 == dosen.id_dosen %}
-                        <td>{{ dosen.nama_dosen }}</td>
-                     {% endif %}
-                     {% if mahasiswa.pembimbing_3 == dosen.id_dosen %}
-                        <td>{{ dosen.nama_dosen }}</td>
-                     {% endif %}
-                     {% if mahasiswa.penguji_1 == dosen.id_dosen %}
-                        <td>{{ dosen.nama_dosen }}</td>
-                     {% endif %}
-                     {% if mahasiswa.penguji_2 == dosen.id_dosen %}
-                        <td>{{ dosen.nama_dosen }}</td>
-                     {% endif %}
-                     {% if mahasiswa.penguji_3 == dosen.id_dosen %}
-                        <td>{{ dosen.nama_dosen }}</td>
-                     {% endif %}
-                     {% if mahasiswa.ketua_prodi == dosen.id_dosen %}
-                        <td>{{ dosen.nama_dosen }}</td>
-                     {% endif %}
-                  {% endfor %}
+                  <td>
+                     {% for dosen in data['dosen'] %}                     
+                        {% if mahasiswa.pembimbing_1 == dosen.id_dosen %}
+                           {{ dosen.nama_dosen }}
+                        {% endif %}
+                     {% endfor %}
+                  </td>
+                  <td>
+                     {% for dosen in data['dosen'] %}                     
+                        {% if mahasiswa.pembimbing_2 == dosen.id_dosen %}
+                           {{ dosen.nama_dosen }}
+                        {% endif %}
+                     {% endfor %}
+                  </td>
+                  <td>
+                     {% for dosen in data['dosen'] %}                     
+                        {% if mahasiswa.penguji_1 == dosen.id_dosen %}
+                           {{ dosen.nama_dosen }}
+                        {% endif %}
+                     {% endfor %}
+                  </td>
+                  <td>
+                     {% for dosen in data['dosen'] %}                     
+                        {% if mahasiswa.penguji_2 == dosen.id_dosen %}
+                           {{ dosen.nama_dosen }}
+                        {% endif %}
+                     {% endfor %}
+                  </td>
+                  <td>
+                     {% for dosen in data['dosen'] %}                     
+                        {% if mahasiswa.penguji_3 == dosen.id_dosen %}
+                           {{ dosen.nama_dosen }}
+                        {% endif %}
+                     {% endfor %}
+                  </td>
+                  <td>
+                     {% for dosen in data['dosen'] %}                     
+                        {% if mahasiswa.ketua_sidang == dosen.id_dosen %}
+                           {{ dosen.nama_dosen }}
+                        {% endif %}
+                     {% endfor %}
+                  </td>
+                  <td>
+                     {% for dosen in data['dosen'] %}                     
+                        {% if mahasiswa.ketua_prodi == dosen.id_dosen %}
+                           {{ dosen.nama_dosen }}
+                        {% endif %}
+                     {% endfor %}
+                  </td>
+                  
                   <td>
                      <a href="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ttd-digital-modal{{mahasiswa.stambuk}}">edit</a>
                      <form action="{{ url_for('hapus_mahasiswa') }}" method="post" class="d-inline">
@@ -168,6 +196,21 @@
                                     <option value="">Pilih Dosen</option>
                                     {% for dosen in data['dosen'] %}
                                        {% if mahasiswa.penguji_3 == dosen.id_dosen %}
+                                          <option value="{{ dosen.id_dosen }}" selected>{{ dosen.nama_dosen }}</option>
+                                       {% else %}
+                                          <option value="{{ dosen.id_dosen }}">{{ dosen.nama_dosen }}</option>
+                                       {% endif %}
+                                    {% endfor %}
+                                 </select>
+                              </div>
+
+                              <!-- ketua sidang -->
+                              <div class="form-group">
+                                 <label for="exampleFormControlSelect1">ketua sidang</label>
+                                 <select class="form-control" name="ketua-sidang" required>
+                                    <option value="">Pilih Dosen</option>
+                                    {% for dosen in data['dosen'] %}
+                                       {% if mahasiswa.ketua_sidang == dosen.id_dosen %}
                                           <option value="{{ dosen.id_dosen }}" selected>{{ dosen.nama_dosen }}</option>
                                        {% else %}
                                           <option value="{{ dosen.id_dosen }}">{{ dosen.nama_dosen }}</option>
@@ -279,6 +322,17 @@
                <div class="form-group">
                   <label for="exampleFormControlSelect1">penguji 3</label>
                   <select class="form-control" name="penguji-3" required>
+                     <option value="">Pilih Dosen</option>
+                     {% for dosen in data['dosen'] %}
+                        <option value="{{ dosen.id_dosen }}">{{ dosen.nama_dosen }}</option>
+                     {% endfor %}
+                  </select>
+               </div>
+
+               <!-- ketua sidang -->
+               <div class="form-group">
+                  <label for="exampleFormControlSelect1">ketua sidang</label>
+                  <select class="form-control" name="ketua-sidang" required>
                      <option value="">Pilih Dosen</option>
                      {% for dosen in data['dosen'] %}
                         <option value="{{ dosen.id_dosen }}">{{ dosen.nama_dosen }}</option>

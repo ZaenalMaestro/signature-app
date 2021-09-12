@@ -3,7 +3,6 @@ q = 67
 
 n = p * q
 tautient_n = (p-1) * (q-1)
-
 def cek_bilangan_bulat(bilangan):
    bilangan = float(bilangan)
    bilangan = str(bilangan)

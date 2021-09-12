@@ -1,4 +1,3 @@
-from threading import main_thread
 from flask import render_template, request, redirect, flash, session
 from flask.helpers import url_for
 from werkzeug.utils import secure_filename
@@ -137,6 +136,7 @@ def show_mahasiswa():
       'dosen': Dosen.query.all(),
       'active_link': 'mahasiswa'
    }
+   
    return render_template('prodi/mahasiswa.html', data = data)
 
 # menu mahasiswa - tambah data
@@ -150,6 +150,7 @@ def tambah_mahasiswa():
       'penguji_1': request.form['penguji-1'],
       'penguji_2': request.form['penguji-2'],
       'penguji_3': request.form['penguji-3'],
+      'ketua_sidang': request.form['ketua-sidang'],
       'ketua_prodi': request.form['ketua-prodi']
    }
    
@@ -179,8 +180,10 @@ def update_mahasiswa():
       'penguji_1': request.form['penguji-1'],
       'penguji_2': request.form['penguji-2'],
       'penguji_3': request.form['penguji-3'],
+      'ketua_sidang': request.form['ketua-sidang'],
       'ketua_prodi': request.form['ketua-prodi']
    }
+
    Mahasiswa.update(request.form['old-stambuk'], data_input)
    flash('data mahasiswa berhasil diubah')
    return redirect('/mahasiswa')
