@@ -243,23 +243,27 @@ def verifikasi():
       
       ttd_cocok = 0
       hasil_verifikasi = list()
-      for dosen in hash_dosen:
+      jabatan_dosen = ['Pembimbing Utama', 'Pembimbing Pendamping', 'Penguji 1',  'Penguji 2', 'Penguji 3', 'Ketua Sidang', 'Ketua Prodi']
+      for dosen, jabatan in zip(hash_dosen, jabatan_dosen):
          for mhs in daftar_hash:
             if dosen['hash_1'] == mhs or dosen['hash_2'] == mhs:
                ttd_cocok += 1
                hasil_verifikasi.append({
                   'nama_dosen':dosen['nama_dosen'],
+                  'jabatan': jabatan,
                   'status': 'valid'
                })
                break
          else:
             hasil_verifikasi.append({
                'nama_dosen':dosen['nama_dosen'],
+               'jabatan': jabatan,
                'status': 'tidak_valid'
             })
       
       
       hasil_akhir = (ttd_cocok, hasil_verifikasi)
+      # return str(hasil_verifikasi)
       return render_template('verifikasi/verifikasi.html', hasil_akhir=hasil_akhir)
 
    return render_template('verifikasi/verifikasi.html')

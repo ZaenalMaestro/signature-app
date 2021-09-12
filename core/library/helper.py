@@ -56,6 +56,7 @@ def get_id_dosen(mahasiswa):
    id_dosen_bersangkutan.append(mahasiswa.penguji_1)
    id_dosen_bersangkutan.append(mahasiswa.penguji_2)
    id_dosen_bersangkutan.append(mahasiswa.penguji_3)
+   id_dosen_bersangkutan.append(mahasiswa.ketua_sidang)
    id_dosen_bersangkutan.append(mahasiswa.ketua_prodi)
    
    return id_dosen_bersangkutan

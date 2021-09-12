@@ -68,7 +68,7 @@
       {% if hasil_akhir %}      
       <!-- Modal -->
       <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-         <div class="modal-dialog modal-dialog-centered" role="document">
+         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                <div class="modal-header">
                   <h5 class="modal-title" id="exampleModalLabel">Hasil Verifikasi</h5>
@@ -81,13 +81,15 @@
                      <thead>
                         <tr>
                            <th scope="col">Nama Dosen</th>
+                           <th scope="col">Status</th>
                            <th scope="col" class="text-center">Verifikasi Tanda Tangan</th>
                         </tr>
                      </thead>
                      <tbody>
                         {% for hasil in hasil_akhir[1] %}
                         <tr>
-                           <td>{{hasil.get('nama_dosen')}}</td>
+                           <td>{{hasil.get('nama_dosen')}} </td>
+                           <td>{{hasil.get('jabatan')}} </td>
                            <td class="text-center">
                               <span class="badge badge-{{ 'success' if hasil.get('status') == 'valid' else 'danger' }}" style="width:80px">{{ hasil.get('status') }}</span>
                            </td>
