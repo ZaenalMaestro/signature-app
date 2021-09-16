@@ -86,7 +86,7 @@
                         </tr>
                      </thead>
                      <tbody>
-                        {% for hasil in hasil_akhir[1] %}
+                        {% for hasil in hasil_akhir %}
                         <tr>
                            <td>{{hasil.get('nama_dosen')}} </td>
                            <td>{{hasil.get('jabatan')}} </td>
@@ -105,7 +105,6 @@
             </div>
          </div>
       </div>
-      {% else %}
       {% endif %}
       
 

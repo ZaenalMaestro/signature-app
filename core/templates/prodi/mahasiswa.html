@@ -24,6 +24,7 @@
          </div>
          </div>
       </div>
+      <!-- tabel data mahasiswa -->
       <div class="table-responsive">
          <!-- Projects table -->
          <table class="table align-items-center table-flush" id="example" style="width:100%">
@@ -38,6 +39,7 @@
                   <th scope="col">Penguji 3</th>
                   <th scope="col">Ketua Sidang</th>
                   <th scope="col">Ketua Prodi</th>
+                  <th scope="col">Dekan</th>
                   <th scope="col">Aksi</th>
                </tr>
             </thead>
@@ -91,6 +93,13 @@
                   <td>
                      {% for dosen in data['dosen'] %}                     
                         {% if mahasiswa.ketua_prodi == dosen.id_dosen %}
+                           {{ dosen.nama_dosen }}
+                        {% endif %}
+                     {% endfor %}
+                  </td>
+                  <td>
+                     {% for dosen in data['dosen'] %}                     
+                        {% if mahasiswa.dekan == dosen.id_dosen %}
                            {{ dosen.nama_dosen }}
                         {% endif %}
                      {% endfor %}
@@ -223,12 +232,34 @@
                               <div class="form-group">
                                  <label for="exampleFormControlSelect1">ketua prodi</label>
                                  <select class="form-control" name="ketua-prodi" required>
-                                    <option value="">Pilih Dosen</option>
+                                    <option value="">Pilih Ketua Prodi</option>
                                     {% for dosen in data['dosen'] %}
                                        {% if mahasiswa.ketua_prodi == dosen.id_dosen %}
-                                          <option value="{{ dosen.id_dosen }}" selected>{{ dosen.nama_dosen }}</option>
+                                          {% if dosen.id_dosen == 7 %}
+                                             <option value="{{ dosen.id_dosen }}" selected>{{ dosen.nama_dosen }} (SI)</option>
+                                          {% elif dosen.id_dosen == 1 %}
+                                             <option value="{{ dosen.id_dosen }}" selected>{{ dosen.nama_dosen }} (TI)</option>
+                                          {% endif %}
                                        {% else %}
-                                          <option value="{{ dosen.id_dosen }}">{{ dosen.nama_dosen }}</option>
+                                          {% if dosen.id_dosen == 7%}
+                                             <option value="{{ dosen.id_dosen }}">{{ dosen.nama_dosen }} (SI)</option>
+                                          {% endif %}
+                                          {% if dosen.id_dosen == 1 %}
+                                             <option value="{{ dosen.id_dosen }}">{{ dosen.nama_dosen }} (TI)</option>
+                                          {% endif %}
+                                       {% endif %}
+                                    {% endfor %}
+                                 </select>
+                              </div>
+
+                              <!-- dekan -->
+                              <div class="form-group">
+                                 <label for="exampleFormControlSelect1">dekan</label>
+                                 <select class="form-control" name="dekan" required>
+                                    <option value="">Pilih Dekan</option>
+                                    {% for dosen in data['dosen'] %}
+                                       {% if dosen.id_dosen == 2 %}
+                                          <option value="{{ dosen.id_dosen }}" selected>{{ dosen.nama_dosen }}</option>
                                        {% endif %}
                                     {% endfor %}
                                  </select>
@@ -344,9 +375,26 @@
                <div class="form-group">
                   <label for="exampleFormControlSelect1">ketua prodi</label>
                   <select class="form-control" name="ketua-prodi" required>
-                     <option value="">Pilih Dosen</option>
+                     <option value="">Pilih Ketua Prodi</option>
                      {% for dosen in data['dosen'] %}
-                        <option value="{{ dosen.id_dosen }}">{{ dosen.nama_dosen }}</option>
+                        {% if dosen.id_dosen == 7%}
+                           <option value="{{ dosen.id_dosen }}">{{ dosen.nama_dosen }} - (SI)</option>
+                        {% elif dosen.id_dosen == 1 %}
+                           <option value="{{ dosen.id_dosen }}">{{ dosen.nama_dosen }} - (TI)</option>
+                        {% endif %}
+                     {% endfor %}
+                  </select>
+               </div>
+
+               <!-- dekan -->
+               <div class="form-group">
+                  <label for="exampleFormControlSelect1">dekan</label>
+                  <select class="form-control" name="dekan" required>
+                     <option value="">Pilih Dekan</option>
+                     {% for dosen in data['dosen'] %}
+                        {% if dosen.id_dosen == 2%}
+                           <option value="{{ dosen.id_dosen }}">{{ dosen.nama_dosen }}</option>
+                        {% endif %}
                      {% endfor %}
                   </select>
                </div>

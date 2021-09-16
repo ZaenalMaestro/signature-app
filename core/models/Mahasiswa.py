@@ -9,9 +9,10 @@ class Mahasiswa(db.Model):
    penguji_3 = db.Column(db.Integer)
    ketua_sidang = db.Column(db.Integer)
    ketua_prodi = db.Column(db.Integer)
+   dekan = db.Column(db.Integer)
    
    def __init__(
-      self, stambuk, nama, pembimbing_1, pembimbing_2, penguji_1, penguji_2, penguji_3, ketua_sidang, ketua_prodi
+      self, stambuk, nama, pembimbing_1, pembimbing_2, penguji_1, penguji_2, penguji_3, ketua_sidang, ketua_prodi, dekan
    ):
       self.stambuk = stambuk
       self.nama = nama
@@ -22,6 +23,7 @@ class Mahasiswa(db.Model):
       self.penguji_3 = penguji_3
       self.ketua_sidang = ketua_sidang
       self.ketua_prodi = ketua_prodi
+      self.dekan = dekan
       
    @classmethod
    def getByStambuk(cls, input_stambuk):
@@ -44,6 +46,7 @@ class Mahasiswa(db.Model):
          data['penguji_3'],
          data['ketua_sidang'],
          data['ketua_prodi'],
+         data['dekan'],
       )
       db.session.add(my_data)
       db.session.commit()
@@ -60,6 +63,7 @@ class Mahasiswa(db.Model):
       my_data.penguji_3 =data['penguji_3']
       my_data.ketua_sidang =data['ketua_sidang']
       my_data.ketua_prodi =data['ketua_prodi']
+      my_data.dekan =data['dekan']
       
       db.session.commit()
       
